@@ -29,6 +29,7 @@ const Canvas = props => {
 
     const [ctx, setCtx] = useState(null)
     const [sphere, setSphere] = useState(null)
+    const [animationPlaying, setAnimationPlaying] = useState(false)
 
     const [freqArray, setFreqArray] = useState(new Uint8Array(initArr))
     const [rafID, setRafID] = useState(null)
@@ -193,11 +194,14 @@ const Canvas = props => {
         if (audio.paused) {
             console.log("playing")
             audio.play();
-            setRafID(requestAnimationFrame(tick));
+            if (!animationPlaying) {
+                setRafID(requestAnimationFrame(tick));
+                setAnimationPlaying(true)
+            }
         } else {
             console.log("pausing")
             audio.pause();
-            cancelAnimationFrame(rafID);
+            //cancelAnimationFrame(rafID);
         }
     }
 
@@ -236,16 +240,13 @@ const Canvas = props => {
         }
     }
 
-    const uploadFile = () => {
-        if (audio) {
-            audio.pause()
-            console.log("pausing")
-        } 
+    const uploadFile = () => {        
         if (!initizlizedAudio) {
             initAudioContext()
         }
         song = blob.createObjectURL(inputRef.current.files[0])
         //handle upload to backend an analysis via promise/get to flask app
+        //also change colors here with response
 
         audioRef.current.src = song
         audioRef.current.load()
