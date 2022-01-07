@@ -262,7 +262,11 @@ const Canvas = props => {
         // animationLoop(canvasRef.current);
 
         ctx.save()
+        ctx.globalCompositeOperation = "lighter";
+        
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+        ctx.fillStyle = "black"
+        ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         sphere.draw(freqArray)
         ctx.restore()
         sphere.update()
@@ -305,7 +309,7 @@ const Canvas = props => {
 
     return (
         <div>
-            <audio ref={audioRef}></audio>
+            <audio ref={audioRef} type="audio/mp3"></audio>
             <canvas height={"100%"} width={"100%"} ref={canvasRef} {...props} />
             <button disabled={isDisabled} onClick={togglePlay} ref={playButtonRef}>Play</button>
             <input type={"file"} accept='.mp3' ref={inputRef} onChange={uploadFile}></input>
